@@ -14,7 +14,7 @@ module Launcher
   end
 
   def simulator_direct_client
-    @simulator_direct_client ||= SimLauncher::DirectClient.new(@application_path, @sdk, @version)
+    @simulator_direct_client ||= SimLauncher::Simulator.new.launch_ios_app(@application_path, @sdk, @version, @args)
   end
 
   def enforce(app_path, locator = Frank::Cucumber::AppBundleLocator.new)
@@ -33,10 +33,11 @@ module Launcher
     end
   end
 
-  def launch_app(app_path, sdk = nil, version = 'iphone', wait_for_launch = true)
+  def launch_app(app_path, sdk = nil, version = 'iphone', wait_for_launch = true, args = nil)
     @application_path = app_path
     @sdk = sdk
     @version = version
+    @args = args
 
     if path_is_mac_app(@application_path)
       launch_mac_app(wait_for_launch)
